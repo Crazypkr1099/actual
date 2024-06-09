@@ -5,7 +5,23 @@
 # you are doing.
 ###################################################
 
-FROM node:18-bullseye as dev
-RUN apt-get update -y && apt-get upgrade -y && apt-get install -y openssl
+# Use an official Node.js runtime as a parent image
+FROM node:14
+
+# Set the working directory in the container to /app
 WORKDIR /app
-CMD ["sh", "./bin/docker-start"]
+
+# Copy package.json and yarn.lock to /app
+COPY package.json yarn.lock ./
+
+# Install dependencies
+RUN yarn install
+
+# Copy the rest of the application to /app
+COPY . .
+
+# Expose port 3000 to the outside world
+EXPOSE 3000
+
+# Command to run the application
+CMD ["yarn", "start"]
