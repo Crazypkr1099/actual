@@ -13,7 +13,7 @@ RUN yarn install
 # Copy the rest of the application code to the working directory
 COPY . .
 
-# Build the React app
+# Add a script for building the React app with Vite
 RUN yarn build
 
 # Serve the app using a static server
