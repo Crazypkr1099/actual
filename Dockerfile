@@ -1,27 +1,24 @@
-###################################################
-# This Dockerfile is used by the docker-compose.yml
-# file to build the development container.
-# Do not make any changes here unless you know what
-# you are doing.
-###################################################
+# Use an official Node runtime as a parent image
+FROM node:14-alpine
 
-# Use an official Node.js runtime as a parent image
-FROM node:20.14.0
-
-# Set the working directory in the container to /app
+# Set the working directory in the container
 WORKDIR /app
 
-# Copy package.json and yarn.lock to /app
+# Copy package.json and yarn.lock to the working directory
 COPY package.json yarn.lock ./
 
 # Install dependencies
 RUN yarn install
 
-# Copy the rest of the application to /app
+# Copy the rest of the application code to the working directory
 COPY . .
 
-# Expose port 3000 to the outside world
-EXPOSE 3000
+# Build the React app
+RUN yarn build
 
-# Command to run the application
-CMD ["yarn", "start"]
+# Serve the app using a static server
+RUN yarn global add serve
+CMD ["serve", "-s", "build"]
+
+# Expose port 5000
+EXPOSE 5000
